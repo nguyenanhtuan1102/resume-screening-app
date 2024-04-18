@@ -2,8 +2,7 @@
 
 This project utilizes logistic regression and Streamlit to automate resume screening, empowering recruiters to efficiently evaluate job applicants' qualifications. By combining machine learning with a user-friendly interface, this app streamlines the recruitment process, saving time and ensuring fair evaluation.
 
-![9470606_4195798](https://github.com/tuanng1102/resume-screening-app/assets/147653892/456cc4fd-5837-4d0c-be39-acc3951034dd)
-
+![resume-screening-software](https://github.com/tuanng1102/resume-screening-app/assets/147653892/dd0bd95e-40fe-4372-a62d-7cb30d2fde76)
 
 # Dependencies
 
