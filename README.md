@@ -10,8 +10,7 @@ The project relies on several Python libraries, including ```numpy```, ```pandas
 
 # Explanation of the Code:
 
-## 1. Data Preprocessing
-### 1.1 Import libraries:
+### 1. Import libraries:
 Importing necessary libraries for data manipulation, visualization, and natural language processing.
 
 ``` bash
@@ -22,14 +21,14 @@ import seaborn as sns
 import re
 ```
 
-### 1.2 Load dataset:
+### 2. Load dataset:
 Loads the resume dataset stored in a CSV file named "UpdatedResumeDataSet.csv" into a Pandas DataFrame named ```df```
 
 ``` bash
 df = pd.read_csv("UpdatedResumeDataSet.csv")
 ```
 
-### 1.3 Exploring dataset:
+### 3. Exploring dataset:
 This step is crucial for understanding the characteristics of the dataset and identifying potential issues. Here, we perform value counts and view unique values in the "Category" column to gain insights into the distribution of job categories. Furthermore, we create a bar plot to visualize the distribution of different job categories visually.
 
 ``` bash
@@ -50,7 +49,9 @@ plt.xticks(rotation=90)
 plt.show()
 ```
 
-### 1.4 Cleaning data:
+![1](https://github.com/tuanng1102/resume-screening-app/assets/147653892/2e558a00-d5b8-4faf-8510-042f67b16aa1)
+
+### 4. Cleaning data:
 There are 4 things that I must solve:
 - URLs
 - Hashtags
@@ -74,7 +75,7 @@ def cleanResume(txt):
 df["Resume"] = df["Resume"].apply(lambda x: cleanResume(x))
 ```
 
-### 1.5 Encoding categorical data:
+### 5. Encoding categorical data:
 Encoding the "Category" column using label encoding to convert categorical data into numerical format.
 
 ``` bash
@@ -83,7 +84,7 @@ le = LabelEncoder()
 df["Category"] = le.fit_transform(df["Category"])
 ```
 
-### 1.6 Vectorizing text data:
+### 6. Vectorizing text data:
 Transforming the text data in the "Resume" column into numerical vectors using TF-IDF vectorization.
 
 ``` bash
@@ -92,7 +93,7 @@ tfidf = TfidfVectorizer(stop_words="english")
 text_vectorized = tfidf.fit_transform(df["Resume"])
 ```
 
-### 1.7 Splitting data to train-set and test-set:
+### 7. Splitting data to train-set and test-set:
 Splitting the dataset into training and testing sets for model training and evaluation.
 
 ``` bash
@@ -100,8 +101,7 @@ from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(text_vectorized, df.Category, test_size=0.2, random_state=42)
 ```
 
-## 2. Modelling
-### 2.1 Training K-Nearest Neighbors model:
+### 8. Training K-Nearest Neighbors model:
 Training a K-Nearest Neighbors classifier using the training data.
 
 ``` bash
@@ -113,14 +113,14 @@ clf = KNeighborsClassifier()
 clf.fit(X_train, y_train)
 ```
 
-### 2.2 Predict model:
+### 9. Predict model:
 Making predictions on the test data using the trained classifier.
 
 ``` bash
 y_pred = clf.predict(X_test)
 ```
 
-### 2.3 Evaluate:
+### 10. Evaluate:
 Evaluating the model's accuracy using the test data.
 
 ``` bash
@@ -128,8 +128,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 print("Accuracy: ",accuracy_score(y_test, y_pred))
 ```
 
-## 3. Prediction System
-### 3.1 Save model
+### 11. Save model
 
 ``` bash
 import pickle
