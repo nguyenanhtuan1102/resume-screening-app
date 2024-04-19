@@ -1,12 +1,18 @@
 # Introduction
 
-This project utilizes logistic regression and Streamlit to automate resume screening, empowering recruiters to efficiently evaluate job applicants' qualifications. By combining machine learning with a user-friendly interface, this app streamlines the recruitment process, saving time and ensuring fair evaluation.
+This project presents a machine learning approach for classifying resumes based on their content. It leverages Natural Language Processing (NLP) techniques for text cleaning, feature extraction, and classification using the K-Nearest Neighbors (KNN) algorithm. The system aims to assist recruiters in efficiently screening resumes by automatically assigning them to relevant categories.
 
 ![resume-screening-software](https://github.com/tuanng1102/resume-screening-app/assets/147653892/dd0bd95e-40fe-4372-a62d-7cb30d2fde76)
 
 # Dependencies
 
-The project relies on several Python libraries, including ```numpy```, ```pandas```, ```matplotlib```, ```seaborn```, and Regular Expression ```re```, to facilitate data manipulation, visualization, and text cleaning processes.
+- ```pandas``` (for data manipulation)
+- ```numpy``` (for numerical computations)
+- ```matplotlib.pyplot``` (for data visualization)
+- ```seaborn``` (for advanced data visualization)
+- Regular Expressions ```re``` (for text cleaning)
+- ```sklearn``` (for machine learning tasks)
+
 
 # Explanation of the Code:
 
@@ -52,12 +58,12 @@ plt.show()
 ![1](https://github.com/tuanng1102/resume-screening-app/assets/147653892/2e558a00-d5b8-4faf-8510-042f67b16aa1)
 
 ### 4. Cleaning data:
-There are 4 things that I must solve:
-- URLs
-- Hashtags
-- Mentions
-- Special letter
-- Punctuation
+A crucial step involves cleaning the resume text to remove irrelevant information and prepare it for machine learning. This includes removing:
+- URLs (e.g., http://www.example.com)
+- Hashtags (e.g., #datascience)
+- Mentions (e.g., @johnDoe)
+- Special characters and punctuation (except for alphanumeric characters and whitespace)
+- Non-ASCII characters
 
 ``` bash
 # Create a function that cleans text data
@@ -85,7 +91,7 @@ df["Category"] = le.fit_transform(df["Category"])
 ```
 
 ### 6. Vectorizing text data:
-Transforming the text data in the "Resume" column into numerical vectors using TF-IDF vectorization.
+The cleaned resume text is transformed into numerical features suitable for machine learning. TF-IDF (Term Frequency-Inverse Document Frequency) is employed to represent each resume as a vector, capturing the importance of words based on their frequency within the document and their overall infrequency across the entire dataset.
 
 ``` bash
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -94,7 +100,8 @@ text_vectorized = tfidf.fit_transform(df["Resume"])
 ```
 
 ### 7. Splitting data to train-set and test-set:
-Splitting the dataset into training and testing sets for model training and evaluation.
+The data is divided into training and testing sets. The training set is used to train the KNN model, while the testing set is used to evaluate its performance on unseen data.
+
 
 ``` bash
 from sklearn.model_selection import train_test_split
@@ -102,7 +109,7 @@ X_train, X_test, y_train, y_test = train_test_split(text_vectorized, df.Category
 ```
 
 ### 8. Training K-Nearest Neighbors model:
-Training a K-Nearest Neighbors classifier using the training data.
+The KNN algorithm is chosen for its simplicity and effectiveness in text classification tasks. It classifies new resumes by finding the k nearest neighbors (most similar resumes) in the training data based on their TF-IDF vectors and assigning the most frequent category among those neighbors.
 
 ``` bash
 from sklearn.multiclass import OneVsRestClassifier
@@ -121,7 +128,8 @@ y_pred = clf.predict(X_test)
 ```
 
 ### 10. Evaluate:
-Evaluating the model's accuracy using the test data.
+The trained KNN model is evaluated on the testing set using accuracy as the primary metric. Accuracy measures the proportion of correctly classified resumes. Additionally, confusion matrix visualization can provide insights into the model's performance for each category.
+
 
 ``` bash
 from sklearn.metrics import accuracy_score, confusion_matrix
@@ -129,6 +137,8 @@ print("Accuracy: ",accuracy_score(y_test, y_pred))
 ```
 
 ### 11. Save model
+The trained TF-IDF vectorizer and KNN model are serialized using pickle for future use. This allows for efficient deployment of the classification system without retraining the model on every execution.
+
 
 ``` bash
 import pickle
