@@ -11,12 +11,13 @@ Our goal is to create an intelligent system capable of classifying resumes based
 
 Our project relies on several essential libraries and tools:
 
-- ```pandas```: For efficient data manipulation.
-- ```numpy```: For performing complex numerical computations.
-- ```matplotlib.pyplot```: For creating visually appealing data visualizations.
-- ```seaborn```: For advanced data visualization techniques.
-- Regular Expressions ```re```: For text cleaning and preprocessing.
-- scikit-learn ```sklearn```: For implementing machine learning algorithms and tasks.
+- ```pandas```: This library is indispensable for data manipulation and analysis, providing powerful data structures and tools for working with structured data.
+- ```numpy```: NumPy is the fundamental package for scientific computing in Python, providing support for large, multi-dimensional arrays and matrices, along with a collection of mathematical functions to operate on these arrays.
+- ```matplotlib.pyplot```: Matplotlib is a comprehensive library for creating static, animated, and interactive visualizations in Python. We specifically import the pyplot module for creating plots and charts.
+- ```seaborn```: Seaborn is a statistical data visualization library built on top of Matplotlib. It provides a high-level interface for drawing attractive and informative statistical graphics.
+- ```re```: The re module provides support for working with regular expressions in Python, which are powerful tools for pattern matching and text manipulation.
+- ```sklearn```: Scikit-learn is a machine learning library in Python that provides simple and efficient tools for data mining and data analysis. It includes a wide range of machine learning algorithms and utilities for preprocessing, model selection, and evaluation.
+
 
 ## Model Preparation:
 
@@ -34,7 +35,7 @@ import re
 ```
 
 ### 2. Load dataset:
-Loads the resume dataset stored in a CSV file named "UpdatedResumeDataSet.csv" into a Pandas DataFrame named ```df```
+This section involves loading the resume dataset from a CSV file into a Pandas DataFrame named ```df```. The dataset contains information about job applicants, including their resumes and corresponding job categories.
 
 ``` bash
 df = pd.read_csv("UpdatedResumeDataSet.csv")
@@ -88,7 +89,7 @@ df["Resume"] = df["Resume"].apply(lambda x: cleanResume(x))
 ```
 
 ### 5. Encoding categorical data:
-Encoding the "Category" column using label encoding to convert categorical data into numerical format.
+Machine learning algorithms require numerical input, so we use label encoding to convert the categorical job categories into numerical labels. The ```LabelEncoder``` from scikit-learn is used to achieve this transformation.
 
 ``` bash
 from sklearn.preprocessing import LabelEncoder
@@ -97,7 +98,7 @@ df["Category"] = le.fit_transform(df["Category"])
 ```
 
 ### 6. Vectorizing text data:
-The cleaned resume text is transformed into numerical features suitable for machine learning. TF-IDF (Term Frequency-Inverse Document Frequency) is employed to represent each resume as a vector, capturing the importance of words based on their frequency within the document and their overall infrequency across the entire dataset.
+Text data cannot be directly used for machine learning algorithms, so we need to convert it into a numerical format. We use the TF-IDF (Term Frequency-Inverse Document Frequency) vectorization technique to transform the cleaned resume text into a matrix of TF-IDF features. This process assigns numerical values to each word in the resume based on its frequency and importance in the document and the entire dataset.
 
 ``` bash
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -106,7 +107,7 @@ text_vectorized = tfidf.fit_transform(df["Resume"])
 ```
 
 ### 7. Splitting data to train-set and test-set:
-The data is divided into training and testing sets. The training set is used to train the KNN model, while the testing set is used to evaluate its performance on unseen data.
+Before training our machine learning model, we split the dataset into training and testing sets. The training set is used to train the model, while the testing set is used to evaluate its performance. The ```train_test_split function``` from scikit-learn is used for this purpose.
 
 
 ``` bash
@@ -115,7 +116,8 @@ X_train, X_test, y_train, y_test = train_test_split(text_vectorized, df.Category
 ```
 
 ### 8. Training K-Nearest Neighbors model:
-The KNN algorithm is chosen for its simplicity and effectiveness in text classification tasks. It classifies new resumes by finding the k nearest neighbors (most similar resumes) in the training data based on their TF-IDF vectors and assigning the most frequent category among those neighbors.
+In this section, we train a K-Nearest Neighbors (KNN) classifier on the training data. KNN is a simple and effective algorithm for classification tasks, particularly in text classification. We initialize the KNeighborsClassifier from scikit-learn and fit it to the training data.
+
 
 ``` bash
 from sklearn.multiclass import OneVsRestClassifier
@@ -152,7 +154,7 @@ pickle.dump(tfidf, open('tfidf.pkl','wb'))
 pickle.dump(clf, open('clf.pkl', 'wb'))
 ```
 
-## Create an application with streamlit
+## Create A Application
 ### 1. Load model
 We load the serialized model and TF-IDF vectorizer.
 
@@ -260,7 +262,7 @@ streamlit run resume-screening-app.py
 ![resume-desktop](https://github.com/tuanng1102/resume-screening-app/assets/147653892/5a391c48-e51d-4cd5-adc6-f6b8ac9b49e3)
 
 ### 5. Make a prediction
-Upload a resume for prediction
+Upload a resume for prediction.
 
 ![resume-predict](https://github.com/tuanng1102/resume-screening-app/assets/147653892/c9ade54e-4c9d-4891-b30c-b585cd5454c1)
 
