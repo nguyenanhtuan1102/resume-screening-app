@@ -1,23 +1,29 @@
-# Introduction
-
-This project presents a machine learning approach for classifying resumes based on their content. It leverages Natural Language Processing (NLP) techniques for text cleaning, feature extraction, and classification using the K-Nearest Neighbors (KNN) algorithm. The system aims to assist recruiters in efficiently screening resumes by automatically assigning them to relevant categories.
+# Automated Resume Screening Application
+Welcome to our Automated Resume Screening Application! 🚀 This powerful tool is designed to revolutionize the way recruiters handle resumes, making the screening process more efficient, objective, and hassle-free. Let's dive into the details of our project and how you can use it to streamline your hiring process.
 
 ![resume-screening-software](https://github.com/tuanng1102/resume-screening-app/assets/147653892/dd0bd95e-40fe-4372-a62d-7cb30d2fde76)
 
-# Dependencies
+## Introduction
 
-- ```pandas``` (for data manipulation)
-- ```numpy``` (for numerical computations)
-- ```matplotlib.pyplot``` (for data visualization)
-- ```seaborn``` (for advanced data visualization)
-- Regular Expressions ```re``` (for text cleaning)
-- ```sklearn``` (for machine learning tasks)
+Our goal is to create an intelligent system capable of classifying resumes based on their content. By leveraging cutting-edge Natural Language Processing (NLP) techniques and the robust K-Nearest Neighbors (KNN) algorithm, we empower recruiters like you to quickly and accurately categorize resumes into relevant job categories. This not only saves time but also ensures a consistent and fair screening process for all applicants.
 
+## Key Dependencies
 
-# Explanation of the Code:
+Our project relies on several essential libraries and tools:
+
+- ```pandas```: For efficient data manipulation.
+- ```numpy```: For performing complex numerical computations.
+- ```matplotlib.pyplot```: For creating visually appealing data visualizations.
+- ```seaborn```: For advanced data visualization techniques.
+- Regular Expressions ```re```: For text cleaning and preprocessing.
+- scikit-learn ```sklearn```: For implementing machine learning algorithms and tasks.
+
+## Model Preparation:
+
+Let's walk through the steps we took to prepare our model:
 
 ### 1. Import libraries:
-Importing necessary libraries for data manipulation, visualization, and natural language processing.
+We start by importing the necessary libraries for data manipulation, visualization, and NLP.
 
 ``` bash
 import pandas as pd
@@ -137,7 +143,7 @@ print("Accuracy: ",accuracy_score(y_test, y_pred))
 ```
 
 ### 11. Save model
-The trained TF-IDF vectorizer and KNN model are serialized using pickle for future use. This allows for efficient deployment of the classification system without retraining the model on every execution.
+The trained ```TF-IDF``` vectorizer and KNN model are serialized using pickle for future use. This allows for efficient deployment of the classification system without retraining the model on every execution.
 
 
 ``` bash
@@ -145,3 +151,117 @@ import pickle
 pickle.dump(tfidf, open('tfidf.pkl','wb'))
 pickle.dump(clf, open('clf.pkl', 'wb'))
 ```
+
+## Create an application with streamlit
+### 1. Load model
+We load the serialized model and TF-IDF vectorizer.
+
+``` bash
+# loading model
+clf = pickle.load(open("model/clf.pkl", "rb"))
+tfidf = pickle.load(open("model/tfidf.pkl", "rb"))
+```
+
+### 2. Clean text
+We define a function to clean the resume text.
+
+``` bash
+# clean text
+def clean_resume(resume_text):
+    clean_text = re.sub(r'http\S+\s*', ' ', resume_text)
+    clean_text = re.sub(r'RT|cc', ' ', clean_text)
+    clean_text = re.sub(r'#\S+', '', clean_text)
+    clean_text = re.sub(r'@\S+', '  ', clean_text)
+    clean_text = re.sub('[%s]' % re.escape(r"""!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"""), ' ', clean_text)
+    clean_text = re.sub(r'[^\x00-\x7f]', r' ', clean_text)
+    clean_text = re.sub(r'\s+', ' ', clean_text)
+    return clean_text
+```
+
+### 3. Web Application
+Our Streamlit app allows users to upload a resume file and predicts its category.
+
+The Streamlit app does the following:
+- Displays a title: "Resume Screening App".
+- Provides a file uploader for users to select a resume in TXT or PDF format.
+- If a file is uploaded:
+    - Reads the uploaded file as bytes.
+    - Attempts to decode the bytes as UTF-8 (common encoding). If errors occur, falls back to Latin-1 encoding.
+    - Cleans the resume text using the clean_resume function.
+    - Transforms the cleaned text into numerical features using the loaded TF-IDF vectorizer (tfidf).
+    - Makes a prediction on the job category using the loaded classification model (clf).
+    - Displays the predicted category.
+    - Maps the predicted category ID to a human-readable category name using a dictionary (category_mapping).
+    - Displays the predicted category name.
+
+``` bash
+def main():
+    st.title("Resume Screening App")
+    upload_file = st.file_uploader("Upload Resume", type=["txt", "pdf"])
+
+    if upload_file is not None:
+        try:
+            resume_bytes = upload_file.read()
+            resume_text = resume_bytes.decode("utf-8")
+        except UnicodeDecodeError:
+            resume_bytes = upload_file.read()
+            resume_text = resume_bytes.decode("latin-1")
+
+        cleaned_resume = clean_resume(resume_text)
+        input_feature = tfidf.transform([cleaned_resume])
+        predictions = clf.predict(input_feature)[0]
+        st.write(predictions)
+
+        # Map category ID to category name
+        category_mapping = {
+            15: "Java Developer",
+            23: "Testing",
+            8: "DevOps Engineer",
+            20: "Python Developer",
+            24: "Web Designing",
+            12: "HR",
+            13: "Hadoop",
+            3: "Blockchain",
+            10: "ETL Developer",
+            18: "Operations Manager",
+            6: "Data Science",
+            22: "Sales",
+            16: "Mechanical Engineer",
+            1: "Arts",
+            7: "Database",
+            11: "Electrical Engineering",
+            14: "Health and fitness",
+            19: "PMO",
+            4: "Business Analyst",
+            9: "DotNet Developer",
+            2: "Automation Testing",
+            17: "Network Security Engineer",
+            21: "SAP Developer",
+            5: "Civil Engineer",
+            0: "Advocate",
+        }
+
+        category_name = category_mapping.get(predictions, "Unknown")
+        st.write("Predicted Category:", category_name)
+
+
+# python main
+if __name__ == "__main__":
+    main()
+```
+
+### 4. Running the app
+To run the application:
+
+``` bash
+streamlit run resume-screening-app.py
+```
+
+![resume-desktop](https://github.com/tuanng1102/resume-screening-app/assets/147653892/5a391c48-e51d-4cd5-adc6-f6b8ac9b49e3)
+
+### 5. Make a prediction
+Upload a resume for prediction
+
+![resume-predict](https://github.com/tuanng1102/resume-screening-app/assets/147653892/c9ade54e-4c9d-4891-b30c-b585cd5454c1)
+
+With our Automated Resume Screening Application, recruiters can now efficiently categorize and evaluate resumes, freeing up valuable time for more strategic tasks in the hiring process. This innovative tool represents a significant step forward in modern recruitment practices, enhancing efficiency, accuracy, and overall effectiveness.
