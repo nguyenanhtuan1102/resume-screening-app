@@ -264,6 +264,6 @@ streamlit run resume-screening-app.py
 ### 5. Make a prediction
 Upload a resume for prediction.
 
-![resume-predict-1](https://github.com/tuanng1102/resume-screening-app/assets/147653892/14ebe92e-6f04-433c-a573-905a21f003ac)
+![resume-predict-1](https://github.com/tuanng1102/resume-screening-app/assets/147653892/abff0ff9-bfd4-4b73-bf88-52e537c36d87)
 
 With our Automated Resume Screening Application, recruiters can now efficiently categorize and evaluate resumes, freeing up valuable time for more strategic tasks in the hiring process. This innovative tool represents a significant step forward in modern recruitment practices, enhancing efficiency, accuracy, and overall effectiveness.
