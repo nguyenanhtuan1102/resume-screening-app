@@ -1,3 +1,4 @@
 nltk==3.8.1
 streamlit==1.35.0
 regex==2024.5.15
+pickle4==0.0.1
