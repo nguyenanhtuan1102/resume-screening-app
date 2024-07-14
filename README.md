@@ -1,7 +1,7 @@
 # Automated Resume Screening Application
 Welcome to our Automated Resume Screening Application! 🚀 This powerful tool is designed to revolutionize the way recruiters handle resumes, making the screening process more efficient, objective, and hassle-free. Let's dive into the details of our project and how you can use it to streamline your hiring process.
 
-![resume-screening-software](https://github.com/tuanng1102/resume-screening-app/assets/147653892/dd0bd95e-40fe-4372-a62d-7cb30d2fde76)
+![resume](https://github.com/user-attachments/assets/9ca62562-d063-43ad-9ba2-91fae9b7946d)
 
 ## Introduction
 
